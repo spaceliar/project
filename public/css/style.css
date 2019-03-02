@@ -1273,8 +1273,8 @@ textarea.input {
 }
 
 .price-filter .input-number {
-  display: inline-block;
-  width: calc(50% - 7px);
+  display: block;
+  width: 100%;
 }
 
 /*----------------------------*\
