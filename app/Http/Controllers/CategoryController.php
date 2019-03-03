@@ -12,7 +12,7 @@ class CategoryController extends Controller
     				->join('sub_category','sub_category.id','=','products.sub_cat_id')
     				->join('category','category.id','=','sub_category.cat_id')
     				->join('supplier','supplier.id','=','products.sup_id')
-    				->get();
+                    ->simplePaginate(10);
     		$cat= DB::table('category')->get();
 
     				
@@ -23,6 +23,17 @@ class CategoryController extends Controller
 
     }
 
-    public function getItem(){}
+    public function getItem($request){
+        $item = DB::table('products')
+                    ->join('sub_category','sub_category.id','=','products.sub_cat_id')
+                    ->join('category','category.id','=','sub_category.cat_id')
+                    ->join('supplier','supplier.id','=','products.sup_id')
+                    ->where('sub_category.cat_id',$request)
+                    ->get();
+                    // dd($request);
+        return $item;
+
+    }
+    
     
 }
