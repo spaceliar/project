@@ -15,7 +15,7 @@
 
 						@foreach($cat as $c)
 						<div class="input-checkbox">
-							<input type="checkbox" id="{{$c->id}}">
+							<input type="checkbox" id="{{$c->id}}" class="checkbox" value="{{$c->id}}">
 							<label for="{{$c->id}}">
 								<span></span>
 								{{$c->cat_name}}
@@ -128,34 +128,10 @@
 
 			<!-- STORE -->
 			<div id="store" class="col-md-9">
-				<!-- store top filter -->
-				<div class="store-filter clearfix">
-					<div class="store-sort">
-						<label>
-							Sort By:
-							<select class="input-select">
-								<option value="0">Popular</option>
-								<option value="1">Position</option>
-							</select>
-						</label>
-
-						<label>
-							Show:
-							<select class="input-select">
-								<option value="0">20</option>
-								<option value="1">50</option>
-							</select>
-						</label>
-					</div>
-					<ul class="store-grid">
-						<li class="active"><i class="fa fa-th"></i></li>
-						<li><a href="#"><i class="fa fa-th-list"></i></a></li>
-					</ul>
-				</div>
-				<!-- /store top filter -->
+				
 
 				<!-- store products -->
-				<div class="row">
+				<div class="row" id="product-item">
 					@foreach($item as $it)
 					<!-- product -->
 					<div class="col-md-4 col-xs-6">
@@ -196,9 +172,7 @@
 
 				<!-- store bottom filter -->
 				<div class="store-filter clearfix">
-					<span class="store-qty">Showing 20-100 products</span>
-					
-						{{ $item->links() }}
+					{{ $item->links() }}
 					
 				</div>
 				<!-- /store bottom filter -->
@@ -210,13 +184,29 @@
 	<!-- /container -->
 </div>
 <!-- /SECTION -->
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
 	$(document).ready(function(){
-		
-		$("#1").change(function(e){
-			$(':checked').
+		$(".checkbox").change(function(){
+			var checkbox_value = "";
+			$(":checkbox").each(function () {
+				var ischecked = $(this).is(":checked");
+				if (ischecked) {
+					checkbox_value += $(this).val() + "|";
+				}
+				$.ajax({
+					url :"{{route('getItem')}}",
+					method : "POST",
+					data : {
+						checkbox_value, _token: '{{csrf_token()}}'
+					} ,
+					success: function(result){
+						$("#store").html(result);
+					}
+				});
+
+			});
+
 		});
 	});
-
-</script>
-@endsection
+	</script>
+	@endsection
